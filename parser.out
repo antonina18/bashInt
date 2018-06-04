@@ -1,0 +1,213 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> statements
+Rule 2     command -> command ARG
+Rule 3     command -> ARG
+Rule 4     statement -> command
+Rule 5     command -> command PIPE command
+Rule 6     separator -> SEMICOLON
+Rule 7     separator -> END
+Rule 8     separator -> separator END
+Rule 9     separator -> separator SEMICOLON
+Rule 10    statements -> statement
+Rule 11    statements -> statements separator statement
+
+Terminals, with rules where they appear
+
+ARG                  : 2 3
+END                  : 7 8
+PIPE                 : 5
+SEMICOLON            : 6 9
+error                : 
+
+Nonterminals, with rules where they appear
+
+command              : 2 4 5 5
+program              : 0
+separator            : 8 9 11
+statement            : 10 11
+statements           : 1 11
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . statements
+    (10) statements -> . statement
+    (11) statements -> . statements separator statement
+    (4) statement -> . command
+    (2) command -> . command ARG
+    (3) command -> . ARG
+    (5) command -> . command PIPE command
+
+    ARG             shift and go to state 5
+
+    program                        shift and go to state 1
+    statements                     shift and go to state 2
+    statement                      shift and go to state 3
+    command                        shift and go to state 4
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> statements .
+    (11) statements -> statements . separator statement
+    (6) separator -> . SEMICOLON
+    (7) separator -> . END
+    (8) separator -> . separator END
+    (9) separator -> . separator SEMICOLON
+
+    $end            reduce using rule 1 (program -> statements .)
+    SEMICOLON       shift and go to state 7
+    END             shift and go to state 8
+
+    separator                      shift and go to state 6
+
+state 3
+
+    (10) statements -> statement .
+
+    SEMICOLON       reduce using rule 10 (statements -> statement .)
+    END             reduce using rule 10 (statements -> statement .)
+    $end            reduce using rule 10 (statements -> statement .)
+
+
+state 4
+
+    (4) statement -> command .
+    (2) command -> command . ARG
+    (5) command -> command . PIPE command
+
+    SEMICOLON       reduce using rule 4 (statement -> command .)
+    END             reduce using rule 4 (statement -> command .)
+    $end            reduce using rule 4 (statement -> command .)
+    ARG             shift and go to state 9
+    PIPE            shift and go to state 10
+
+
+state 5
+
+    (3) command -> ARG .
+
+    ARG             reduce using rule 3 (command -> ARG .)
+    PIPE            reduce using rule 3 (command -> ARG .)
+    SEMICOLON       reduce using rule 3 (command -> ARG .)
+    END             reduce using rule 3 (command -> ARG .)
+    $end            reduce using rule 3 (command -> ARG .)
+
+
+state 6
+
+    (11) statements -> statements separator . statement
+    (8) separator -> separator . END
+    (9) separator -> separator . SEMICOLON
+    (4) statement -> . command
+    (2) command -> . command ARG
+    (3) command -> . ARG
+    (5) command -> . command PIPE command
+
+    END             shift and go to state 12
+    SEMICOLON       shift and go to state 13
+    ARG             shift and go to state 5
+
+    statement                      shift and go to state 11
+    command                        shift and go to state 4
+
+state 7
+
+    (6) separator -> SEMICOLON .
+
+    END             reduce using rule 6 (separator -> SEMICOLON .)
+    SEMICOLON       reduce using rule 6 (separator -> SEMICOLON .)
+    ARG             reduce using rule 6 (separator -> SEMICOLON .)
+
+
+state 8
+
+    (7) separator -> END .
+
+    END             reduce using rule 7 (separator -> END .)
+    SEMICOLON       reduce using rule 7 (separator -> END .)
+    ARG             reduce using rule 7 (separator -> END .)
+
+
+state 9
+
+    (2) command -> command ARG .
+
+    ARG             reduce using rule 2 (command -> command ARG .)
+    PIPE            reduce using rule 2 (command -> command ARG .)
+    SEMICOLON       reduce using rule 2 (command -> command ARG .)
+    END             reduce using rule 2 (command -> command ARG .)
+    $end            reduce using rule 2 (command -> command ARG .)
+
+
+state 10
+
+    (5) command -> command PIPE . command
+    (2) command -> . command ARG
+    (3) command -> . ARG
+    (5) command -> . command PIPE command
+
+    ARG             shift and go to state 5
+
+    command                        shift and go to state 14
+
+state 11
+
+    (11) statements -> statements separator statement .
+
+    SEMICOLON       reduce using rule 11 (statements -> statements separator statement .)
+    END             reduce using rule 11 (statements -> statements separator statement .)
+    $end            reduce using rule 11 (statements -> statements separator statement .)
+
+
+state 12
+
+    (8) separator -> separator END .
+
+    END             reduce using rule 8 (separator -> separator END .)
+    SEMICOLON       reduce using rule 8 (separator -> separator END .)
+    ARG             reduce using rule 8 (separator -> separator END .)
+
+
+state 13
+
+    (9) separator -> separator SEMICOLON .
+
+    END             reduce using rule 9 (separator -> separator SEMICOLON .)
+    SEMICOLON       reduce using rule 9 (separator -> separator SEMICOLON .)
+    ARG             reduce using rule 9 (separator -> separator SEMICOLON .)
+
+
+state 14
+
+    (5) command -> command PIPE command .
+    (2) command -> command . ARG
+    (5) command -> command . PIPE command
+
+  ! shift/reduce conflict for ARG resolved as shift
+  ! shift/reduce conflict for PIPE resolved as shift
+    SEMICOLON       reduce using rule 5 (command -> command PIPE command .)
+    END             reduce using rule 5 (command -> command PIPE command .)
+    $end            reduce using rule 5 (command -> command PIPE command .)
+    ARG             shift and go to state 9
+    PIPE            shift and go to state 10
+
+  ! ARG             [ reduce using rule 5 (command -> command PIPE command .) ]
+  ! PIPE            [ reduce using rule 5 (command -> command PIPE command .) ]
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ARG in state 14 resolved as shift
+WARNING: shift/reduce conflict for PIPE in state 14 resolved as shift
